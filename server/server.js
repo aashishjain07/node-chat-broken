@@ -6,7 +6,7 @@ const publicPath = path.join(__dirname, '../public');
 const port = process.env.PORT || 3000;
 
 var app = express();
-var server = http.createServer(app)
+var server = http.createServer(app);
 var io = socketIO(server);
 
 app.use(express.static(publicPath));
@@ -20,14 +20,19 @@ io.on('connection', (socket) => {
 //   createdAt : 123
 // });
 
-socket.emit('newMessage', {
-  from: 'Ashish',
-  text: 'See you later',
-  createdAt: '123123'
-})
+// socket.emit('newMessage', {
+//   from: 'Ashish',
+//   text: 'See you later',
+//   createdAt: '123123'
+// })
 
 socket.on('createMessage', (message) => {
   console.log('createMessage', message);
+  io.emit('newMessage', {
+    from: message.from,
+    text: message.text,
+    createdAt: new Date().getTime()
+  })
 });
 
 // socket.on('createEmail', (newEmail) => {
